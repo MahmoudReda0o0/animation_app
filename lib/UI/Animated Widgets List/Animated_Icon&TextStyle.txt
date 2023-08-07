@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../Model/Provider/Provider_data.dart';
+
+class Animated_IconANDText extends StatefulWidget{
+  State<StatefulWidget> createState()=>Icon_Text_s();
+}
+
+class Icon_Text_s extends State<Animated_IconANDText>with SingleTickerProviderStateMixin{
+
+  bool isplay=true;
+  late AnimationController _controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this);
+
+  // @override
+  // void initState(){
+  //   super.initState();
+  //   _controller=AnimationController(
+  //       duration: Duration(seconds: 1),
+  //       vsync: this);
+  // }
+  @override
+  void dispose(){
+    super.dispose();
+    _controller.dispose();
+  }
+
+
+  bool selected =true;
+  double size =40;
+  Color textColor=Colors.red ;
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Provider.of<ProviderData>(context).Anime_List[Provider.of<ProviderData>(context).index]),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          AnimatedDefaultTextStyle(
+            curve: Curves.decelerate,
+              child: Text('Animated =)'),
+              style: TextStyle(
+                fontSize: size,
+                color: textColor,
+                fontWeight: FontWeight.bold,
+              ),
+              duration: Duration(seconds: 1),
+          ),
+          AnimatedIcon(
+              icon: AnimatedIcons.play_pause,
+              size: 90,
+              progress: _controller),
+          Center(
+            child: TextButton(
+              onPressed: (){
+                if(isplay==true){
+                  _controller.forward();
+                }
+                else if(isplay==false){
+                  _controller.reverse();
+                }
+                setState((){
+                  isplay=!isplay;
+                  selected =!selected;
+                  size=selected? 40:60;
+                  textColor=selected?Colors.red:Colors.cyan;
+                });
+              },
+              child: Text('Switch',style: TextStyle(fontSize: 30),),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
